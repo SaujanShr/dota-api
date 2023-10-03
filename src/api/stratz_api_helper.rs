@@ -23,7 +23,7 @@ pub fn get_hero_position_map(positions: &Vec<(PositionType, Vec<get_win_week_her
     hero_position_map
 }
 
-pub fn gql_heroes_to_heroes(gql_heroes: Vec<get_heroes_serde::GQLHero>, hero_position_map: HashMap::<u16, Vec<(PositionType, get_win_week_heroes_serde::GQLHero)>>) -> Result<Vec<Hero>, Error> {
+pub fn gql_heroes_to_heroes(gql_heroes: &Vec<get_heroes_serde::GQLHero>, hero_position_map: &HashMap::<u16, Vec<(PositionType, get_win_week_heroes_serde::GQLHero)>>) -> Result<Vec<Hero>, Error> {
     gql_heroes
         .iter()
         .map(|hero| match hero_position_map.get(&hero.id) {

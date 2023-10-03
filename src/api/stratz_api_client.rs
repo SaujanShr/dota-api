@@ -51,6 +51,6 @@ impl StratzApiClient {
 
         let hero_position_map = get_hero_position_map(&hero_positions);
 
-        gql_heroes_to_heroes(gql_heroes, hero_position_map)
+        gql_heroes_to_heroes(&gql_heroes, &hero_position_map)
     }
 }

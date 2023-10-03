@@ -16,18 +16,18 @@ const GET_HEROES_QUERY: &str = "query getHeroes {
 
 pub async fn get_heroes(client: &Client) -> Result<Vec<GQLHero>, Error> {
     match client.query::<GQLData>(GET_HEROES_QUERY).await {
-        Ok(response) => parse_response(response),
-        Err(error) => parse_error(error)
+        Ok(response) => parse_response(&response),
+        Err(error) => parse_error(&error)
     }
 }
 
-fn parse_response(response: Option<GQLData>) -> Result<Vec<GQLHero>, Error> {
+fn parse_response(response: &Option<GQLData>) -> Result<Vec<GQLHero>, Error> {
     match response {
-        Some(data) => Ok(data.constants.heroes),
+        Some(data) => Ok(data.constants.heroes.clone()),
         None => Err(Error { code: ErrorCode::MissingDataError, message: format!("The getHeroes query response is valid but empty") })
     }
 }
 
-fn parse_error(error: GraphQLError) -> Result<Vec<GQLHero>, Error> {
+fn parse_error(error: &GraphQLError) -> Result<Vec<GQLHero>, Error> {
     Err(Error { code: ErrorCode::QueryError, message: error.message().to_string() })
 }

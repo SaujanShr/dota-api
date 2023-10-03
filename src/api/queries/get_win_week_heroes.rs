@@ -26,13 +26,13 @@ const GET_WIN_WEEK_QUERY_WITH_PARAMS: &str = "query getWinWeek($brackets:[RankBr
 }";
 
 pub async fn get_win_week_heroes(client: &Client, brackets: &Vec<RankBracket>, regions: &Vec<RegionType>, game_modes: &Vec<GameModeType>, positions: &Vec<PositionType>) -> Result<Vec<GQLHero>, Error> {
-    let params = Vars::new(&brackets, &regions, &game_modes, &positions);
+    let params = Vars::new(brackets, regions, game_modes, positions);
     
     match client.query_with_vars::<GQLData, Vars>(GET_WIN_WEEK_QUERY_WITH_PARAMS, params).await {
-        Ok(response) => parse_response(response),
+        Ok(response) => parse_response(&response),
         Err(error) => {
             println!("{}", error);
-            parse_error(error)
+            parse_error(&error)
         }
     }
 }
@@ -48,13 +48,13 @@ pub async fn get_win_week_positions(client: &Client, brackets: &Vec<RankBracket>
     ).await
 }
 
-fn parse_response(response: Option<GQLData>) -> Result<Vec<GQLHero>, Error> {
+fn parse_response(response: &Option<GQLData>) -> Result<Vec<GQLHero>, Error> {
     match response {
-        Some(data) => Ok(data.heroStats.winWeek),
+        Some(data) => Ok(data.heroStats.winWeek.clone()),
         None => Err(Error { code: ErrorCode::MissingDataError, message: format!("The getWinWeek query response is valid but empty") })
     }
 }
 
-fn parse_error(error: GraphQLError) -> Result<Vec<GQLHero>, Error> {
+fn parse_error(error: &GraphQLError) -> Result<Vec<GQLHero>, Error> {
     Err(Error { code: ErrorCode::QueryError, message: error.to_string() })
 }

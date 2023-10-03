@@ -13,7 +13,7 @@ pub struct GQLConstants {
 }
 
 #[allow(non_snake_case)]
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct GQLHero {
     pub id: u16,
     pub displayName: String
