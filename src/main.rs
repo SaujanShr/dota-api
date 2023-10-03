@@ -12,7 +12,5 @@ async fn main() {
     let token = get_token().expect("err");
     let client = StratzApiClient::new(token);
 
-    let v = client.get_heroes_query().await.expect("err");
-
-    println!("yep");
+    client.get_heroes().await.expect("wtf").iter().for_each(|hero| println!("{}", hero.id));
 }
